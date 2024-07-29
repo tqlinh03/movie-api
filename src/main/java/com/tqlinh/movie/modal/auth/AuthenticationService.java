@@ -2,7 +2,6 @@ package com.tqlinh.movie.modal.auth;
 
 import com.tqlinh.movie.modal.email.EmailService;
 import com.tqlinh.movie.modal.email.EmailTemplateName;
-import com.tqlinh.movie.modal.role.RoleRepository;
 import com.tqlinh.movie.modal.token.Token;
 import com.tqlinh.movie.modal.token.TokenRepository;
 import com.tqlinh.movie.modal.user.User;
@@ -21,13 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+//
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
@@ -38,9 +36,6 @@ public class AuthenticationService {
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
-//        var userRole = roleRepository.findByName("USER")
-//                // todo - better exception handling
-//                .orElseThrow(() -> new IllegalStateException("ROLE USER was not initiated"));
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -48,7 +43,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
-//                .roles(List.of(userRole))
+                .role(request.getRole())
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);

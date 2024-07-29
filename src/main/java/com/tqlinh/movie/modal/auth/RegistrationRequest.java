@@ -1,5 +1,6 @@
 package com.tqlinh.movie.modal.auth;
 
+import com.tqlinh.movie.modal.user.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -28,4 +29,5 @@ public class RegistrationRequest {
     @NotNull(message = "Password is mandatory")
     @Size(min = 8, message = "Password should be 8 characters long minimum")
     private String password;
+    private Role role;
 }

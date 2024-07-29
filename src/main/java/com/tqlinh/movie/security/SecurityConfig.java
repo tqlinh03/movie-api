@@ -3,6 +3,7 @@ package com.tqlinh.movie.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,6 +13,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.tqlinh.movie.modal.user.Permisstion.ADMIN_READ;
+import static com.tqlinh.movie.modal.user.Permisstion.MANAGER_READ;
+import static com.tqlinh.movie.modal.user.Role.ADMIN;
+import static com.tqlinh.movie.modal.user.Role.MANAGER;
+import static org.springframework.http.HttpMethod.GET;
 
 @Configuration
 @EnableWebSecurity
@@ -40,6 +47,9 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+                        .requestMatchers("/api/v1/management").hasAnyRole(ADMIN.name(), MANAGER.name())
+                        .requestMatchers(GET, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
                         .anyRequest()
                         .authenticated()
                 )

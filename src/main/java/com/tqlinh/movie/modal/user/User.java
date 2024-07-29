@@ -1,11 +1,12 @@
 package com.tqlinh.movie.modal.user;
 
-import com.tqlinh.movie.modal.role.Role;
+//import com.tqlinh.movie.modal.role.Role;
 import com.tqlinh.movie.modal.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
+    @Getter
     @Column(unique = true)
     private String email;
     private String password;
@@ -34,26 +36,33 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Token> token;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private List<Role> roles;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id")
+//    )
+//    private List<Role> roles;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return role.getAuthorities();
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    public String getUserEmail() {
+        return email;
     }
 
     public String fullName() {
