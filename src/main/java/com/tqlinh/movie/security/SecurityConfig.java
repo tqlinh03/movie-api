@@ -14,11 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.tqlinh.movie.modal.user.Permisstion.ADMIN_READ;
-import static com.tqlinh.movie.modal.user.Permisstion.MANAGER_READ;
+import static com.tqlinh.movie.modal.user.Permisstion.*;
 import static com.tqlinh.movie.modal.user.Role.ADMIN;
 import static com.tqlinh.movie.modal.user.Role.MANAGER;
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +27,19 @@ public class SecurityConfig {
 
     private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final String[] WHITE_LIST_URL = {
+            "/auth/**",
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,23 +47,22 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/auth/**",
-                                "/v2/api-docs",
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/swagger-resources",
-                                "/swagger-resources/**",
-                                "/configuration/ui",
-                                "/configuration/security",
-                                "/swagger-ui/**",
-                                "/webjars/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
-                        .requestMatchers("/api/v1/management").hasAnyRole(ADMIN.name(), MANAGER.name())
-                        .requestMatchers(GET, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                        .requestMatchers(HttpMethod.POST, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                        .anyRequest()
-                        .authenticated()
+                                .requestMatchers(WHITE_LIST_URL)
+                                .permitAll()
+//                        PERMISSION MANAGER
+                                .requestMatchers("/api/v1/management").hasAnyRole(ADMIN.name(), MANAGER.name())
+                                .requestMatchers(GET, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+                                .requestMatchers(GET, "/api/v1/management/:id").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+                                .requestMatchers(POST, "/api/v1/management").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+
+//                       EXCHANGER RATE
+                                .requestMatchers("/api/v1/exchange-rate").hasAnyRole(ADMIN.name(), MANAGER.name())
+                                .requestMatchers(POST, "/api/v1/exchange-rate").hasAnyAuthority((ADMIN_CREATE.name()), MANAGER_CREATE.name())
+                                .requestMatchers(PATCH, "/api/v1/exchange-rate").hasAnyAuthority((ADMIN_UPDATE.name()), MANAGER_UPDATE.name())
+                                .requestMatchers(DELETE, "/api/v1/exchange-rate").hasAnyAuthority((ADMIN_DELETE.name()), MANAGER_DELETE.name())
+                                .requestMatchers(GET, "/api/v1/exchange-rate").hasAnyAuthority((ADMIN_READ.name()), MANAGER_READ.name())
+                                .anyRequest()
+                                .authenticated()
                 )
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

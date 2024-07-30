@@ -30,6 +30,12 @@ public class ManagementController {
     public String get() {
         return "GET:: management controller";
     }
+    @GetMapping("/{id}")
+    public String getId(
+            @PathVariable int id
+    ) {
+        return "GET:: management controller with id: " + id;
+    }
     @PostMapping
     public String post() {
         return "POST:: management controller";

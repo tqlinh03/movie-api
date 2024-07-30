@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
-//@EnableAsync
+@EnableAsync
 @SpringBootApplication
 public class MovieApiApplication {
 
