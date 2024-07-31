@@ -1,9 +1,12 @@
-package com.tqlinh.movie.modal.exchangeRate;
+package com.tqlinh.movie.modal.point;
 
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.exchange.Exchange;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,16 +14,15 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "point")
 @EntityListeners(AuditingEntityListener.class)
-public class ExchangeRate extends BaseEntity {
+public class Point extends BaseEntity {
+    private long point;
 
-    private Integer currency;
-    private Integer point;
-
-    @OneToMany(mappedBy = "exchangeRate")
-    private List<Exchange> exchanges;
+    @OneToMany(mappedBy = "point")
+    List<Exchange> exchanges;
 }

@@ -1,6 +1,7 @@
 package com.tqlinh.movie.modal.user;
 
 //import com.tqlinh.movie.modal.role.Role;
+import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,14 +36,10 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> token;
+    @OneToOne()
+    @JoinColumn(name = "point_id", referencedColumnName = "id")
+    private Point point;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "user_roles",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id")
-//    )
-//    private List<Role> roles;
 
     @Enumerated(EnumType.STRING)
     private Role role;
