@@ -1,7 +1,12 @@
 package com.tqlinh.movie.modal.exchangeRate;
 
+import com.tqlinh.movie.common.PageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,12 +42,29 @@ public class ExchangeRateService {
 
     }
 
-    public List<ExchangeRateResponse> findAll() {
-        List<ExchangeRateResponse> exchangeRateResponsese = exchangeRateRepository.findAll()
-                .stream()
+    public PageResponse<ExchangeRateResponse> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+        Page<ExchangeRate> exchangeRates = exchangeRateRepository.findAll(pageable);
+        List<ExchangeRateResponse> responses = exchangeRates.stream()
                 .map(exchangeRateMapper::toExchangeRateResponse)
                 .toList();
-        return exchangeRateResponsese;
-
+        return new PageResponse<>(
+                responses,
+                exchangeRates.getNumber(),
+                exchangeRates.getSize(),
+                exchangeRates.getTotalElements(),
+                exchangeRates.getTotalPages(),
+                exchangeRates.isFirst(),
+                exchangeRates.isLast()
+        );
     }
+
+//    public List<ExchangeRateResponse> findAll() {
+//        List<ExchangeRateResponse> exchangeRateResponsese = exchangeRateRepository.findAll()
+//                .stream()
+//                .map(exchangeRateMapper::toExchangeRateResponse)
+//                .toList();
+//        return exchangeRateResponsese;
+//
+//    }
 }

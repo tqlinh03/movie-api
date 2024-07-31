@@ -1,5 +1,6 @@
 package com.tqlinh.movie.modal.exchangeRate;
 
+import com.tqlinh.movie.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,11 @@ public class ExchangeRateController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ExchangeRateResponse>> findAll() {
-        return ResponseEntity.ok(exchangeRateService.findAll());
+    public ResponseEntity<PageResponse<ExchangeRateResponse>> findAll(
+        @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+        @RequestParam(name = "size", defaultValue = "0", required = false) int size
+
+    ) {
+        return ResponseEntity.ok(exchangeRateService.findAll(page, size));
     }
 }
