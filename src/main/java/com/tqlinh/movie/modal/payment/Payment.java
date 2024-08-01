@@ -27,6 +27,8 @@ public class Payment extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+    @Column(length = 1000)
+    private String paymentUrl;
 
     @OneToOne
     @JoinColumn(name = "notification_id")

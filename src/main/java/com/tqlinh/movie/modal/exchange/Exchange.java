@@ -3,6 +3,7 @@ package com.tqlinh.movie.modal.exchange;
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.exchangeRate.ExchangeRate;
 import com.tqlinh.movie.modal.payment.Payment;
+import com.tqlinh.movie.modal.payment.PaymentMethod;
 import com.tqlinh.movie.modal.point.Point;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -20,7 +23,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Exchange extends BaseEntity {
+    private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "point_id")

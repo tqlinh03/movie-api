@@ -2,6 +2,8 @@ package com.tqlinh.movie.modal.auth;
 
 import com.tqlinh.movie.modal.email.EmailService;
 import com.tqlinh.movie.modal.email.EmailTemplateName;
+import com.tqlinh.movie.modal.point.Point;
+import com.tqlinh.movie.modal.point.PointRepository;
 import com.tqlinh.movie.modal.token.Token;
 import com.tqlinh.movie.modal.token.TokenRepository;
 import com.tqlinh.movie.modal.user.User;
@@ -31,11 +33,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
+    private final PointRepository pointRepository;
 
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
+        Point point = new Point();
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -43,6 +47,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
+                .point(pointRepository.save(point))
                 .role(request.getRole())
                 .build();
         userRepository.save(user);
