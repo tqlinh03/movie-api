@@ -28,6 +28,7 @@ public class SecurityConfig {
     private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final String[] WHITE_LIST_URL = {
+            "/exchange/**",
             "/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",

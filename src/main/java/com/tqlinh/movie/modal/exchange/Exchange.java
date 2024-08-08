@@ -23,11 +23,8 @@ import java.math.BigDecimal;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Exchange extends BaseEntity {
-    private BigDecimal amount;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod;
-
+    private Long orderCode;
     @ManyToOne
     @JoinColumn(name = "point_id")
     private Point point;

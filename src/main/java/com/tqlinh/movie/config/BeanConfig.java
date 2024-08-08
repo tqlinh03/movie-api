@@ -1,6 +1,7 @@
 package com.tqlinh.movie.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -13,12 +14,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+import vn.payos.PayOS;
 
 
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfig {
     private final UserDetailsService userDetailsService;
+
+    @Value("${application.payment.payOs.CLIENT_ID}")
+    private String CLIENT_ID;
+
+    @Value("${application.payment.payOs.API_KEY}")
+    private String API_KEY;
+
+    @Value("${application.payment.payOs.CHECKSUM_KEY}")
+    private String CHECKSUM_KEY;
+
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -46,5 +58,10 @@ public class BeanConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public PayOS payOS() {
+        return new PayOS(CLIENT_ID, API_KEY, CHECKSUM_KEY);
     }
 }

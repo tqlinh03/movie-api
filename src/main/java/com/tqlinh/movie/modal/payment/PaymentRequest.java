@@ -1,8 +1,11 @@
 package com.tqlinh.movie.modal.payment;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 
-public record PaymentRequest(
+@Builder
+public record PaymentRequest (
         BigDecimal amount,
         PaymentMethod paymentMethod
 ) {

@@ -1,12 +1,14 @@
 package com.tqlinh.movie.modal.exchange;
 
-import com.tqlinh.movie.modal.payment.PaymentMethod;
+import com.tqlinh.movie.modal.payment.Payment;
+import com.tqlinh.movie.modal.point.Point;
+import lombok.Builder;
 
-import java.math.BigDecimal;
-
+@Builder
 public record ExchangeRequest(
-        BigDecimal amount,
-        PaymentMethod paymentMethod,
-        Integer exchangeRateId
-) {
+        Integer exchangeRateId,
+        Payment payment,
+        Point point,
+        Long orderCode
+        ) {
 }
