@@ -3,6 +3,7 @@ package com.tqlinh.movie.modal.user;
 //import com.tqlinh.movie.modal.role.Role;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.token.Token;
+import com.tqlinh.movie.modal.vip.Vip;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,10 +37,14 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> token;
+
     @OneToOne()
     @JoinColumn(name = "point_id", referencedColumnName = "id")
     private Point point;
 
+    @OneToOne()
+    @JoinColumn(name = "vip_id", referencedColumnName = "id")
+    private Vip vip;
 
     @Enumerated(EnumType.STRING)
     private Role role;
