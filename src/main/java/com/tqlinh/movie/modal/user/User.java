@@ -1,9 +1,12 @@
 package com.tqlinh.movie.modal.user;
 
-//import com.tqlinh.movie.modal.role.Role;
+//import com.tqlinh.movieId.modal.role.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tqlinh.movie.modal.movie.Movie;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.token.Token;
 import com.tqlinh.movie.modal.vip.Vip;
+import com.tqlinh.movie.modal.watchlist.Watchlist;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,7 +29,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
-    @Getter
+
     @Column(unique = true)
     private String email;
     private String password;
@@ -46,8 +49,16 @@ public class User implements UserDetails {
     @JoinColumn(name = "vip_id", referencedColumnName = "id")
     private Vip vip;
 
+    @OneToMany(mappedBy = "owner")
+    private List<Movie> movie;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne()
+    @JoinColumn(name = "watchlist_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private Watchlist watchlist;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
