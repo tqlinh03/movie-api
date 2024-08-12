@@ -10,6 +10,8 @@ import com.tqlinh.movie.modal.user.User;
 import com.tqlinh.movie.modal.user.UserRepository;
 import com.tqlinh.movie.modal.vip.Vip;
 import com.tqlinh.movie.modal.vip.VipRepository;
+import com.tqlinh.movie.modal.watchlist.Watchlist;
+import com.tqlinh.movie.modal.watchlist.WatchlistRepository;
 import com.tqlinh.movie.security.JwtService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final PointRepository pointRepository;
     private final VipRepository vipRepository;
+    private final WatchlistRepository watchlistRepository;
 
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
@@ -44,6 +47,7 @@ public class AuthenticationService {
     public void register(RegistrationRequest request) throws MessagingException {
         Point point = new Point();
         Vip vip = new Vip();
+        Watchlist watchlist = new Watchlist();
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -53,6 +57,7 @@ public class AuthenticationService {
                 .enabled(false)
                 .point(pointRepository.save(point))
                 .vip(vipRepository.save(vip))
+                .watchlist(watchlistRepository.save(watchlist))
                 .role(request.getRole())
                 .build();
         userRepository.save(user);

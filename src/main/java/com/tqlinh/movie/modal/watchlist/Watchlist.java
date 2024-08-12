@@ -23,17 +23,18 @@ public class Watchlist {
     @Id
     @GeneratedValue
     private Integer id;
+//
+//    @ManyToMany(mappedBy = "watchlists")
+//    @JsonIgnoreProperties("watchlists")
+//    private List<Movie> movies;
 
-    @OneToOne(mappedBy="watchlist")
-    @JsonBackReference
-    private User user;
+    @ManyToMany
+    @JoinTable(
+            name = "watchlist_movie",
+            joinColumns = @JoinColumn(name = "watchlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
-    private Movie movie;
-
-    @ManyToMany(mappedBy = "watchlists")
+    )
     @JsonIgnoreProperties("watchlists")
     private List<Movie> movies;
-
 }

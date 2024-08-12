@@ -39,7 +39,7 @@ public class MovieService {
                .orElseThrow(() -> new RuntimeException("Movie not found"));
         User user = (User) connectedUser.getPrincipal();
         if (!Objects.equals(user.getId(), movie.getOwner().getId())) {
-            throw new OperationNotPermittedException("You cannot update others movieId status");
+            throw new OperationNotPermittedException("You cannot update others movie status");
         }
         List<Genre> genres = findByIds(request.genreIds());
         movie.setGenre(genres);

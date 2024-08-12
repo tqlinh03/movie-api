@@ -57,7 +57,6 @@ public class User implements UserDetails {
 
     @OneToOne()
     @JoinColumn(name = "watchlist_id", referencedColumnName = "id")
-    @JsonManagedReference
     private Watchlist watchlist;
 
     @Override

@@ -43,14 +43,18 @@ public class Movie extends BaseEntity {
     @JsonIgnoreProperties("users")
     private List<Genre> genre;
 
-    @ManyToMany
-    @JoinTable(
-            name = "movie_watchlists",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "watchlist_id")
+//    @ManyToMany
+//    @JoinTable(
+//            name = "movie_watchlists",
+//            joinColumns = @JoinColumn(name = "movie_id"),
+//            inverseJoinColumns = @JoinColumn(name = "watchlist_id")
+//
+//    )
+//    @JsonIgnoreProperties("movies")
+//    private List<Watchlist> ;
 
-    )
-    @JsonIgnoreProperties("movies")
+    @ManyToMany(mappedBy = "movies")
+    @JsonIgnoreProperties("Watchlist")
     private List<Watchlist> watchlists;
 
     @OneToMany(mappedBy = "movie")
