@@ -2,6 +2,7 @@ package com.tqlinh.movie.modal.user;
 
 //import com.tqlinh.movieId.modal.role.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
 import com.tqlinh.movie.modal.movie.Movie;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.token.Token;
@@ -44,6 +45,10 @@ public class User implements UserDetails {
     @OneToOne()
     @JoinColumn(name = "point_id", referencedColumnName = "id")
     private Point point;
+
+    @OneToOne()
+    @JoinColumn(name = "episodeAccess_id", referencedColumnName = "id")
+    private EpisodeAccess episodeAccess;
 
     @OneToOne()
     @JoinColumn(name = "vip_id", referencedColumnName = "id")

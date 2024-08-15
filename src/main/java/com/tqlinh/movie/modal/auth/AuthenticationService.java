@@ -2,6 +2,8 @@ package com.tqlinh.movie.modal.auth;
 
 import com.tqlinh.movie.modal.email.EmailService;
 import com.tqlinh.movie.modal.email.EmailTemplateName;
+import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
+import com.tqlinh.movie.modal.episodeAccess.EpisodeAccessRepository;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.point.PointRepository;
 import com.tqlinh.movie.modal.token.Token;
@@ -10,6 +12,9 @@ import com.tqlinh.movie.modal.user.User;
 import com.tqlinh.movie.modal.user.UserRepository;
 import com.tqlinh.movie.modal.vip.Vip;
 import com.tqlinh.movie.modal.vip.VipRepository;
+import com.tqlinh.movie.modal.vipPackage.VipName;
+import com.tqlinh.movie.modal.vipPackage.VipPackage;
+import com.tqlinh.movie.modal.vipPackage.VipPackageRepository;
 import com.tqlinh.movie.modal.watchlist.Watchlist;
 import com.tqlinh.movie.modal.watchlist.WatchlistRepository;
 import com.tqlinh.movie.security.JwtService;
@@ -40,14 +45,21 @@ public class AuthenticationService {
     private final PointRepository pointRepository;
     private final VipRepository vipRepository;
     private final WatchlistRepository watchlistRepository;
+    private final EpisodeAccessRepository episodeAccessRepository;
+    private final VipPackageRepository vipPackageRepository;
 
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
+        VipPackage vipPackage = vipPackageRepository.findByName(VipName.VIP);
+        Vip vip = Vip.builder()
+                .vipPackage(vipPackage)
+                .build();
         Point point = new Point();
-        Vip vip = new Vip();
+
         Watchlist watchlist = new Watchlist();
+        EpisodeAccess episodeAccess = new EpisodeAccess();
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -58,6 +70,7 @@ public class AuthenticationService {
                 .point(pointRepository.save(point))
                 .vip(vipRepository.save(vip))
                 .watchlist(watchlistRepository.save(watchlist))
+                .episodeAccess(episodeAccessRepository.save(episodeAccess))
                 .role(request.getRole())
                 .build();
         userRepository.save(user);

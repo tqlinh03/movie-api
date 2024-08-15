@@ -1,7 +1,7 @@
 package com.tqlinh.movie.modal.vipPackage;
 
 public record VipPackageRequest(
-         String name,
+         VipName name,
          Integer numberOfMonths,
          Integer point
 ) {

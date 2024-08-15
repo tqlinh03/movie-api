@@ -1,17 +1,26 @@
 package com.tqlinh.movie.modal.episode;
 
 import com.tqlinh.movie.common.PageResponse;
+import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
+import com.tqlinh.movie.modal.episodeAccess.EpisodeAccessRepository;
 import com.tqlinh.movie.modal.movie.Movie;
 import com.tqlinh.movie.modal.movie.MovieRepository;
+import com.tqlinh.movie.modal.point.PointService;
+import com.tqlinh.movie.modal.user.User;
+import com.tqlinh.movie.modal.vipPackage.VipName;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +28,8 @@ public class EpisodeService {
     public final EpisodeMapper episodeMapper;
     public final EpisodeRepository episodeRepository;
     private final MovieRepository movieRepository;
+    private final EpisodeAccessRepository episodeAccessRepository;
+    private final PointService pointService;
 
 
     public Integer create(EpisodeRequest request) {
@@ -41,11 +52,30 @@ public class EpisodeService {
          episodeRepository.delete(episode);
     }
 
-    public EpisodeResponse findById(Integer id) {
-        Episode episode = episodeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Not found episode rate"));
-        return episodeMapper.toResponse(episode);
+    @Transactional
+    public EpisodeResponse checkAccessEpisode(Integer episodeId, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        List<Episode> episodes = user.getEpisodeAccess().getEpisodes();
+        Episode episode = episodeRepository.findById(episodeId)
+                .orElseThrow(() -> new RuntimeException("Not found episode"));
+        // check vip status
+        VipName vipName = user.getVip().getVipPackage().getName();
+        LocalDateTime vipEndDate = user.getVip().getVipEndDate();
+        if (checkVipStatus(vipName, vipEndDate)) {
+            return findById(episodeId);
+        }
+        // Check episode access
+        if (checkEpisodeAccess(episodes, episodeId)) {
+            return findById(episodeId);
+        }
+        // deduct point user and save episode access
+        pointService.deductPoints(episode.getPoint(), user);
+        episodes.add(episode);
+        EpisodeAccess episodeAccess = user.getEpisodeAccess();
+        episodeAccess.setEpisodes(episodes);
+        episodeAccessRepository.save(episodeAccess);
 
+        return findById(episodeId);
     }
 
     public PageResponse<EpisodeResponse> findAll(int page, int size) {
@@ -65,12 +95,23 @@ public class EpisodeService {
         );
     }
 
-//    public List<GenreResponse> findAll() {
-//        List<GenreResponse> exchangeRateResponsese = episodeRepository.findAll()
-//                .stream()
-//                .map(episodeMapper::toExchangeRateResponse)
-//                .toList();
-//        return exchangeRateResponsese;
-//
-//    }
+    public EpisodeResponse findById(Integer id) {
+        Episode episode = episodeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Not found episode rate"));
+        return episodeMapper.toResponse(episode);
+    }
+
+    public Boolean checkVipStatus(VipName vipName, LocalDateTime vipEndDate) {
+        LocalDateTime now = LocalDateTime.now();
+        return vipName == VipName.SUPER_VIP && now.isBefore(vipEndDate);
+    }
+
+    public Boolean checkEpisodeAccess(List<Episode> episodes, Integer episodeId) {
+        for (Episode episode : episodes) {
+            if (Objects.equals(episode.getId(), episodeId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

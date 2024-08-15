@@ -2,9 +2,7 @@ package com.tqlinh.movie.modal.vipPackage;
 
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.vip.Vip;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +20,8 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class VipPackage extends BaseEntity {
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private VipName name;
     private Integer numberOfMonths;
     private Integer point;
 

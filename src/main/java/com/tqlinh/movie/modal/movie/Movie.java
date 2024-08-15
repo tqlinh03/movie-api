@@ -40,7 +40,7 @@ public class Movie extends BaseEntity {
     @JoinTable(name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    @JsonIgnoreProperties("users")
+    @JsonIgnoreProperties("movies")
     private List<Genre> genre;
 
 //    @ManyToMany

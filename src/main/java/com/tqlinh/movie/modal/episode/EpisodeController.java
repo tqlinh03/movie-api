@@ -4,6 +4,7 @@ import com.tqlinh.movie.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,9 +38,10 @@ public class EpisodeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EpisodeResponse> findById(
-            @PathVariable("id") Integer id
+            @PathVariable("id") Integer episodeId,
+            Authentication connectedUser
     ) {
-        return ResponseEntity.ok(episodeService.findById(id));
+        return ResponseEntity.ok(episodeService.checkAccessEpisode(episodeId, connectedUser));
     }
 
     @GetMapping

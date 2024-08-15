@@ -13,7 +13,7 @@ public class PointService {
     public void deductPoints(Integer pointAmount, User user) {
         Point point = pointRepository.findById(user.getPoint().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Not found point"));
-        if (user.getPoint().getPoint() >= pointAmount) {
+        if (point.getPoint() >= pointAmount) {
             point.setPoint(point.getPoint() - pointAmount);
             pointRepository.save(point);
         } else {

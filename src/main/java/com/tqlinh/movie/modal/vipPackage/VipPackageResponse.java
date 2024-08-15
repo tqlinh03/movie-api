@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class VipPackageResponse {
-    private String name;
+    private VipName name;
     private Integer monthDuration;
     private Integer point;
 }
