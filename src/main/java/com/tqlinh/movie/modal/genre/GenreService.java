@@ -60,12 +60,13 @@ public class GenreService {
         );
     }
 
-//    public List<GenreResponse> findAll() {
-//        List<GenreResponse> exchangeRateResponsese = genreRepository.findAll()
-//                .stream()
-//                .map(genreMapper::toExchangeRateResponse)
-//                .toList();
-//        return exchangeRateResponsese;
-//
-//    }
+
+    public List<GenreResponse> findGenreAll() {
+        List<GenreResponse> genreResponses = genreRepository.findAll()
+                .stream()
+                .map(genreMapper::toResponse)
+                .toList();
+        return genreResponses;
+
+    }
 }

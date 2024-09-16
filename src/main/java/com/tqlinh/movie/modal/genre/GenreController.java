@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/genre")
 @RequiredArgsConstructor
@@ -43,11 +45,16 @@ public class GenreController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<GenreResponse>> findAll(
+    public ResponseEntity<PageResponse<GenreResponse>> findAllPage(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,
         @RequestParam(name = "size", defaultValue = "0", required = false) int size
 
     ) {
         return ResponseEntity.ok(genreService.findAll(page, size));
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<List<GenreResponse>> findAll() {
+        return ResponseEntity.ok(genreService.findGenreAll());
     }
 }

@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GenreResponse {
+    private Integer id;
     private String name;
 }

@@ -2,6 +2,7 @@ package com.tqlinh.movie.modal.user;
 
 //import com.tqlinh.movieId.modal.role.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tqlinh.movie.modal.checkinLog.CheckinLog;
 import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
 import com.tqlinh.movie.modal.movie.Movie;
 import com.tqlinh.movie.modal.point.Point;
@@ -15,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import java.util.List;
 @Entity
 @Table(name = "_user")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
+public class User implements UserDetails, Principal {
     @Id
     @GeneratedValue
     private Integer id;
@@ -36,8 +38,8 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    private Boolean accountLocked;
-    private Boolean enabled;
+    private boolean accountLocked;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "user")
     private List<Token> token;
@@ -64,6 +66,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "watchlist_id", referencedColumnName = "id")
     private Watchlist watchlist;
 
+    @OneToMany(mappedBy = "user")
+    private List<CheckinLog> checkinLogs;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
@@ -78,31 +83,28 @@ public class User implements UserDetails {
         return firstName + " " + lastName;
     }
 
-    public String getUserEmail() {
-        return email;
-    }
-
-    public String fullName() {
-        return getFirstName() + " " + getLastName();
-    }
-
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return !accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return enabled;
+    }
+
+    @Override
+    public String getName() {
+        return lastName;
     }
 }

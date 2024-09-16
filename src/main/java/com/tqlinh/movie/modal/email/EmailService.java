@@ -23,7 +23,7 @@ import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE
 public class EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
-
+ 
     @Async
     public void sendEmail(
             String to,

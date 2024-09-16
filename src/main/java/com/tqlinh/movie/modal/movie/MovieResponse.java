@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Builder
 public class MovieResponse {
+    Integer id;
     String title;
     String description;
     String thumbnailUrl;

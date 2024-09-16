@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movies")
 @RequiredArgsConstructor
 public class MovieController {
     public final MovieService movieService;

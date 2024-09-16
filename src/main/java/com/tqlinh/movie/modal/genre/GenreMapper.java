@@ -15,6 +15,7 @@ public class GenreMapper {
 
     public GenreResponse toResponse(Genre genre) {
         return GenreResponse.builder()
+                .id(genre.getId())
                 .name(genre.getName())
                 .build();
     }
