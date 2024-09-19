@@ -1,4 +1,4 @@
-package com.tqlinh.movie.modal.dailyReWard;
+package com.tqlinh.movie.modal.dailyReward;
 
 import com.tqlinh.movie.common.BaseEntity;
 import jakarta.persistence.Entity;
