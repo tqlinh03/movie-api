@@ -24,6 +24,15 @@ public class CheckinLogController {
         return ResponseEntity.ok((checkinLogService.checkin(request, connectedUser)));
     }
 
+    @GetMapping("streak")
+    public ResponseEntity<Integer> StreakCheckin(
+            Authentication connectedUser
+    ) {
+        return ResponseEntity.ok((checkinLogService.StreakCheckin(connectedUser)));
+    }
+
+
+
 
 
 }

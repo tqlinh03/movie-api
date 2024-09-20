@@ -103,7 +103,7 @@ public class EpisodeService {
 
     public Boolean checkVipStatus(VipName vipName, LocalDateTime vipEndDate) {
         LocalDateTime now = LocalDateTime.now();
-        return vipName == VipName.SUPER_VIP && now.isBefore(vipEndDate);
+        return vipName == VipName.VIP && now.isBefore(vipEndDate);
     }
 
     public Boolean checkEpisodeAccess(List<Episode> episodes, Integer episodeId) {

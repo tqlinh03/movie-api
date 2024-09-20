@@ -1,6 +1,7 @@
 package com.tqlinh.movie.modal.dailyReward;
 
 import com.tqlinh.movie.common.BaseEntity;
+import com.tqlinh.movie.modal.checkinLog.CheckinLog;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
@@ -25,5 +26,5 @@ public class DailyReward extends BaseEntity {
     private Integer day;
 
     @OneToMany(mappedBy = "dailyReward")
-    private List<DailyReward> dailyRewards;
+    private List<CheckinLog> checkinLogs;
 }

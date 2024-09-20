@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/vip-package")
 @RequiredArgsConstructor
@@ -50,5 +52,10 @@ public class VipPackageController {
 
     ) {
         return ResponseEntity.ok(vipPackageService.findAll(page, size));
+    }
+
+    @GetMapping("/super-vip-all")
+    public ResponseEntity<List<VipPackageResponse>> findAllSuperVip() {
+        return ResponseEntity.ok(vipPackageService.findAllSuperVip());
     }
 }

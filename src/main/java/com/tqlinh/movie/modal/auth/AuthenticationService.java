@@ -62,10 +62,7 @@ public class AuthenticationService {
     private String activationUrl;
 
     public void register(RegistrationRequest request) throws MessagingException {
-        VipPackage vipPackage = vipPackageRepository.findByName(VipName.VIP);
-        Vip vip = Vip.builder()
-                .vipPackage(vipPackage)
-                .build();
+        Vip vip = new Vip();
         Point point = new Point();
 
         Watchlist watchlist = new Watchlist();

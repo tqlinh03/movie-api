@@ -23,8 +23,12 @@ public class DailyRewardService {
 
 
     public Integer create(DailyRewardRequest request) {
-        DailyReward dailyReward = dailyRewardMapper.toDailyReWard(request);
-        return dailyRewardRepository.save(dailyReward).getId();
+        DailyReward dailyReward = dailyRewardRepository.findByday(request.day());
+        if (dailyReward != null) {
+            throw new IllegalStateException("Day is existed");
+        }
+        DailyReward newdailyReward = dailyRewardMapper.toDailyReWard(request);
+        return dailyRewardRepository.save(newdailyReward).getId();
     }
 
     public Integer update(Integer id, DailyRewardRequest request) {
@@ -39,7 +43,7 @@ public class DailyRewardService {
          dailyRewardRepository.delete(dailyReward);
     }
 
-    public PageResponse<DailyRewardResponse> findAll(int page, int size) {
+    public PageResponse<DailyRewardResponse> findAllPage(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<DailyReward> dailyReward = dailyRewardRepository.findAll(pageable);
         List<DailyRewardResponse> responses = dailyReward.stream()
@@ -63,4 +67,10 @@ public class DailyRewardService {
     }
 
 
+    public List<DailyRewardResponse> findAll() {
+        List<DailyRewardResponse> responses = dailyRewardRepository.findAllDailyReward().stream()
+                .map(dailyRewardMapper::toResponse)
+                .toList();
+        return responses;
+    }
 }

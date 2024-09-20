@@ -12,6 +12,7 @@ public class DailyRewardMapper {
 
     public DailyRewardResponse toResponse(DailyReward dailyReward) {
         return DailyRewardResponse.builder()
+                .id(dailyReward.getId())
                 .day(dailyReward.getDay())
                 .point(dailyReward.getPoint())
                 .build();

@@ -21,6 +21,7 @@ public class VipPackageMapper {
 
     public VipPackageResponse toVipPackageResponse(VipPackage vipPackage) {
         return VipPackageResponse.builder()
+                .id(vipPackage.getId())
                 .name(vipPackage.getName())
                 .monthDuration(vipPackage.getNumberOfMonths())
                 .point(vipPackage.getPoint())

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/daily-eward")
 @RequiredArgsConstructor
@@ -39,12 +41,17 @@ public class DailyRewardController {
 
 
     @GetMapping
-    public ResponseEntity<PageResponse<DailyRewardResponse>> findAll(
+    public ResponseEntity<PageResponse<DailyRewardResponse>> findAllPage(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "0", required = false) int size
 
     ) {
-        return ResponseEntity.ok(dailyRewardService.findAll(page, size));
+        return ResponseEntity.ok(dailyRewardService.findAllPage(page, size));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<DailyRewardResponse>> findAll() {
+        return ResponseEntity.ok(dailyRewardService.findAll());
     }
 
 }

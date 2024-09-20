@@ -60,12 +60,10 @@ public class VipPackageService {
         );
     }
 
-//    public List<VipPackageResponse> findAll() {
-//        List<VipPackageResponse> exchangeRateResponsese = vipPackageRepository.findAll()
-//                .stream()
-//                .map(vipPackageMapper::toExchangeRateResponse)
-//                .toList();
-//        return exchangeRateResponsese;
-//
-//    }
+    public List<VipPackageResponse> findAllSuperVip() {
+        List<VipPackageResponse> responses = vipPackageRepository.findAllSuperVip().stream()
+                .map(vipPackageMapper::toVipPackageResponse)
+                .toList();
+        return responses;
+    }
 }
