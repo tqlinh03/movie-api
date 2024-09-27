@@ -5,6 +5,7 @@ import com.tqlinh.movie.modal.dailyReward.*;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.point.PointRepository;
 import com.tqlinh.movie.modal.user.User;
+import com.tqlinh.movie.modal.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class CheckinLogService {
     public final CheckinLogRepository checkinLogRepository;
     private final DailyRewardRepository dailyRewardRepository;
     private final PointRepository pointRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Integer checkin(CheckinLogRequest request, Authentication connectedUser) {
@@ -42,6 +44,15 @@ public class CheckinLogService {
                 .orElseThrow(() -> new EntityNotFoundException("Point Not Found"));
         point.setPoint(point.getPoint() + dailyReward.getPoint());
 
+        // handle streak
+        int streak = user.getStreak() + 1;
+        System.out.println(streak);
+        if(streak > 7) {
+            streak = 1;
+        }
+        user.setStreak(streak);
+        userRepository.save(user);
+
         // save check-in
         CheckinLog newCheckinLog = CheckinLog.builder()
                 .date(currentDate)
@@ -54,21 +65,7 @@ public class CheckinLogService {
 
     public Integer StreakCheckin(Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
-        List<LocalDate> checkinDates = checkinLogRepository.findCheckinDateByUserId(user.getId());
-        Integer streak = 1;
-        LocalDate previousDate = checkinDates.getFirst();
-
-        for (int i = 1; i < checkinDates.size(); i++) {
-            LocalDate currentDate = checkinDates.get(i);
-
-            if (currentDate.equals(previousDate.minusDays(1))) {
-                streak++;
-            } else {
-                break;
-            }
-            previousDate = currentDate;
-        }
-    return streak;
+        return user.getStreak();
     }
 
 }

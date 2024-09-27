@@ -8,6 +8,7 @@ import lombok.*;
 //@NoArgsConstructor
 @Builder
 public class ExchangeRateResponse {
+    private Integer id;
     private Integer currency;
     private Integer point;
 }

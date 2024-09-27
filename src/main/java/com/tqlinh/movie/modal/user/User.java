@@ -38,6 +38,7 @@ public class User implements UserDetails, Principal {
     private String password;
     private String firstName;
     private String lastName;
+    private Integer streak;
     private boolean accountLocked;
     private boolean enabled;
 

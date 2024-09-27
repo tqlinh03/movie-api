@@ -50,6 +50,11 @@ public class VipService {
     public VipResponse getInfoVipUser(Authentication connected) {
         User user = (User) connected.getPrincipal();
         LocalDateTime now = LocalDateTime.now();
+
+        if (user.getVip().getVipPackage() == null) {
+            return null;
+        }
+
         VipResponse response = vipMapper.toResponse(user.getVip());
         if (user.getVip().getVipEndDate().isAfter(now)) {
             String remainTime = getRemainingVipTime(user.getVip());

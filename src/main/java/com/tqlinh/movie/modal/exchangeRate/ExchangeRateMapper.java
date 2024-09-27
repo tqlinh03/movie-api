@@ -13,6 +13,7 @@ public class ExchangeRateMapper {
 
     public ExchangeRateResponse toExchangeRateResponse(ExchangeRate exchangeRate) {
         return ExchangeRateResponse.builder()
+                .id(exchangeRate.getId())
                 .currency(exchangeRate.getCurrency())
                 .point(exchangeRate.getPoint())
                 .build();

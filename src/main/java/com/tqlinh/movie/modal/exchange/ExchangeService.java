@@ -54,8 +54,7 @@ public class ExchangeService {
         exchangeRepository.save(exchange);
 
         request.setOrderCode(orderCode);
-        String payment_URL = paymentService.createPaymentLink(request);
-        return payment_URL;
+        return paymentService.createPaymentLink(request);
     }
 
     public ObjectNode confirmWebhook(Map<String, Object> requestBody) {

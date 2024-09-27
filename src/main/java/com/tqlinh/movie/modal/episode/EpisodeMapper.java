@@ -35,6 +35,7 @@ public class EpisodeMapper {
         episode.setReleaseDateTime(request.releaseDateTime());
         episode.setMovieUrl(request.movieUrl());
         episode.setPoint(request.point());
+        episode.setPayUntil(request.payUntil());
         return episode;
     }
 

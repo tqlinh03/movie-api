@@ -44,6 +44,12 @@ public class ExchangeRateController {
         return ResponseEntity.ok(exchangeRateService.findById(id));
     }
 
+    @GetMapping("/latest")
+    public ResponseEntity<ExchangeRateResponse> getLatestExchangeRate() {
+
+        return ResponseEntity.ok(exchangeRateService.getLatestExchangeRate());
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<ExchangeRateResponse>> findAll(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,

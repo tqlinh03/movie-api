@@ -74,6 +74,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
+                .streak(0)
                 .point(pointRepository.save(point))
                 .vip(vipRepository.save(vip))
                 .watchlist(watchlistRepository.save(watchlist))

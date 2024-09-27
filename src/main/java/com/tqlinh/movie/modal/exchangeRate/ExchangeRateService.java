@@ -59,6 +59,14 @@ public class ExchangeRateService {
         );
     }
 
+    // lấy tỉ lệ đổi điểm mới nhất
+    public ExchangeRateResponse getLatestExchangeRate() {
+        ExchangeRateResponse res = exchangeRateRepository.findTopByOrderByCreatedDateDesc()
+                .map(exchangeRateMapper::toExchangeRateResponse)
+                .orElseThrow(() -> new RuntimeException("No exchange rate found"));
+        return res;
+    }
+
 //    public List<ExchangeRateResponse> findAll() {
 //        List<ExchangeRateResponse> exchangeRateResponsese = exchangeRateRepository.findAll()
 //                .stream()
