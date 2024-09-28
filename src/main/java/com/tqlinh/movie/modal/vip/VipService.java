@@ -52,7 +52,7 @@ public class VipService {
         LocalDateTime now = LocalDateTime.now();
 
         if (user.getVip().getVipPackage() == null) {
-            return null;
+             throw  new EntityNotFoundException("Vip Not Found");
         }
 
         VipResponse response = vipMapper.toResponse(user.getVip());
@@ -69,7 +69,7 @@ public class VipService {
         Period period = Period.between(now.toLocalDate(), vip.getVipEndDate().toLocalDate());
         Duration duration = Duration.between(now, vip.getVipEndDate());
 
-        long days = duration.toDays() % 30;
+        long days = period.getDays();
         long months = period.getMonths();
         long years = period.getYears();
 
@@ -80,7 +80,9 @@ public class VipService {
         if (months > 0) {
             remainingTime.append(months).append(" tháng ");
         }
-        remainingTime.append(days).append(" ngày");
+        if (days > 0) {
+            remainingTime.append(days).append(" ngày");
+        }
 
         return remainingTime.toString().trim();
     }
