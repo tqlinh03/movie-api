@@ -2,12 +2,11 @@ package com.tqlinh.movie.modal.episode;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.movie.Movie;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.tqlinh.movie.modal.view.View;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,4 +35,9 @@ public class Episode extends BaseEntity {
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     @JsonBackReference
     private Movie movie;
+
+    @OneToOne
+    @JoinColumn(name = "view_id", referencedColumnName = "id")
+    @JsonManagedReference
+    private View view;
 }

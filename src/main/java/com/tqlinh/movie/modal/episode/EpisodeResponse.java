@@ -1,5 +1,7 @@
 package com.tqlinh.movie.modal.episode;
 
+import com.tqlinh.movie.modal.view.View;
+import com.tqlinh.movie.modal.view.ViewResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,4 +16,5 @@ public class EpisodeResponse {
     private String movieUrl;
     private Integer point;
     private LocalDateTime payUntil;
+    private ViewResponse view;
 }

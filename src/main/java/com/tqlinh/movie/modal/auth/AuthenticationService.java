@@ -1,22 +1,14 @@
 package com.tqlinh.movie.modal.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tqlinh.movie.modal.email.EmailService;
 import com.tqlinh.movie.modal.email.EmailTemplateName;
-import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
-import com.tqlinh.movie.modal.episodeAccess.EpisodeAccessRepository;
 import com.tqlinh.movie.modal.point.Point;
 import com.tqlinh.movie.modal.point.PointRepository;
 import com.tqlinh.movie.modal.token.Token;
 import com.tqlinh.movie.modal.token.TokenRepository;
-import com.tqlinh.movie.modal.user.User;
-import com.tqlinh.movie.modal.user.UserMapper;
-import com.tqlinh.movie.modal.user.UserRepository;
-import com.tqlinh.movie.modal.user.UserResponse;
+import com.tqlinh.movie.modal.user.*;
 import com.tqlinh.movie.modal.vip.Vip;
 import com.tqlinh.movie.modal.vip.VipRepository;
-import com.tqlinh.movie.modal.vipPackage.VipName;
-import com.tqlinh.movie.modal.vipPackage.VipPackage;
 import com.tqlinh.movie.modal.vipPackage.VipPackageRepository;
 import com.tqlinh.movie.modal.watchlist.Watchlist;
 import com.tqlinh.movie.modal.watchlist.WatchlistRepository;
@@ -27,7 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,7 +45,6 @@ public class AuthenticationService {
     private final PointRepository pointRepository;
     private final VipRepository vipRepository;
     private final WatchlistRepository watchlistRepository;
-    private final EpisodeAccessRepository episodeAccessRepository;
     private final VipPackageRepository vipPackageRepository;
     private final UserMapper userMapper;
 
@@ -66,7 +56,6 @@ public class AuthenticationService {
         Point point = new Point();
 
         Watchlist watchlist = new Watchlist();
-        EpisodeAccess episodeAccess = new EpisodeAccess();
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -78,8 +67,7 @@ public class AuthenticationService {
                 .point(pointRepository.save(point))
                 .vip(vipRepository.save(vip))
                 .watchlist(watchlistRepository.save(watchlist))
-                .episodeAccess(episodeAccessRepository.save(episodeAccess))
-                .role(request.getRole())
+                .role(Role.USER)
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
@@ -219,7 +207,14 @@ public class AuthenticationService {
                 }
             }
         }
-
         return null;
+    }
+
+    public void logout(HttpServletResponse response) {
+        var cookie = new Cookie("refresh_token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }

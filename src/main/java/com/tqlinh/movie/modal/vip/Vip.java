@@ -1,6 +1,9 @@
 package com.tqlinh.movie.modal.vip;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.vipPackage.VipPackage;
 import jakarta.persistence.*;
@@ -30,6 +33,7 @@ public class Vip {
 
     @ManyToOne
     @JoinColumn(name = "vipPackage_Id", referencedColumnName = "id")
+    @JsonBackReference
     private VipPackage vipPackage;
 
 }

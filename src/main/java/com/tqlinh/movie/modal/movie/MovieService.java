@@ -4,7 +4,6 @@ import com.tqlinh.movie.common.PageResponse;
 import com.tqlinh.movie.exception.OperationNotPermittedException;
 import com.tqlinh.movie.modal.genre.Genre;
 import com.tqlinh.movie.modal.genre.GenreRepository;
-import com.tqlinh.movie.modal.movie.*;
 import com.tqlinh.movie.modal.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

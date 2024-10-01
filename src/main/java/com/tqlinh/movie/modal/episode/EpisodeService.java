@@ -1,8 +1,6 @@
 package com.tqlinh.movie.modal.episode;
 
 import com.tqlinh.movie.common.PageResponse;
-import com.tqlinh.movie.modal.episodeAccess.EpisodeAccess;
-import com.tqlinh.movie.modal.episodeAccess.EpisodeAccessRepository;
 import com.tqlinh.movie.modal.movie.Movie;
 import com.tqlinh.movie.modal.movie.MovieRepository;
 import com.tqlinh.movie.modal.point.PointService;
@@ -28,7 +26,6 @@ public class EpisodeService {
     public final EpisodeMapper episodeMapper;
     public final EpisodeRepository episodeRepository;
     private final MovieRepository movieRepository;
-    private final EpisodeAccessRepository episodeAccessRepository;
     private final PointService pointService;
 
 
@@ -55,7 +52,6 @@ public class EpisodeService {
     @Transactional
     public EpisodeResponse checkAccessEpisode(Integer episodeId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
-        List<Episode> episodes = user.getEpisodeAccess().getEpisodes();
         Episode episode = episodeRepository.findById(episodeId)
                 .orElseThrow(() -> new RuntimeException("Not found episode"));
         // check vip status
@@ -64,16 +60,8 @@ public class EpisodeService {
         if (checkVipStatus(vipName, vipEndDate)) {
             return findById(episodeId);
         }
-        // Check episode access
-        if (checkEpisodeAccess(episodes, episodeId)) {
-            return findById(episodeId);
-        }
         // deduct point user and save episode access
         pointService.deductPoints(episode.getPoint(), user);
-        episodes.add(episode);
-        EpisodeAccess episodeAccess = user.getEpisodeAccess();
-        episodeAccess.setEpisodes(episodes);
-        episodeAccessRepository.save(episodeAccess);
 
         return findById(episodeId);
     }

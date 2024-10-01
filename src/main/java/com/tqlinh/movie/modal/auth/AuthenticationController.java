@@ -65,4 +65,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.refreshToken(request, response));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            HttpServletResponse response) {
+        service.logout(response);
+        return ResponseEntity.accepted().body("Ok.");
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tqlinh.movie.modal.token;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tqlinh.movie.modal.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,7 @@ public class Token {
     private LocalDateTime validatedAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 

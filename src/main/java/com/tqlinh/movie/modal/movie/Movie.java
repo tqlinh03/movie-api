@@ -1,5 +1,6 @@
 package com.tqlinh.movie.modal.movie;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tqlinh.movie.common.BaseEntity;
@@ -33,6 +34,7 @@ public class Movie extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JsonBackReference
     private User owner;
 
 

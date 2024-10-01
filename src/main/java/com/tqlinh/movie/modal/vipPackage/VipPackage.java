@@ -1,5 +1,7 @@
 package com.tqlinh.movie.modal.vipPackage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tqlinh.movie.common.BaseEntity;
 import com.tqlinh.movie.modal.vip.Vip;
 import jakarta.persistence.*;
